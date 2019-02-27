@@ -1,41 +1,191 @@
-var createError = require('http-errors');
-var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
+const createError = require('http-errors');
+const express = require('express');
+const path = require('path');
+const cookieParser = require('cookie-parser');
+const logger = require('morgan');
 
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
+const indexRouter = require('./routes/index');
+const usersRouter = require('./routes/users');
+const session = require('express-session');
 
-var app = express();
+const app = express();
+
+//temporales
+const stickers = require('./api/stickers');
+const persons = require('./api/persons');
+
+//users
+const rols = require('./api/users/rols');
+const users = require('./api/users/users');
+const auth = require('./auth/index');
+
+//identification
+const verifications = require('./api/dwc_identification/verifications');
+const identification = require('./api/dwc_identification/identification');
+
+//location
+const continent = require('./api/dwc_location/continent');
+const waterbody = require('./api/dwc_location/waterbody');
+const island = require('./api/dwc_location/island');
+const geodeticdatum = require('./api/dwc_location/geodeticdatum');
+const georeferenceverificationstatus = require('./api/dwc_location/georefverificationstatus');
+const location = require('./api/dwc_location/location');
+
+//taxon
+const linneo = require('./api/dwc_taxon/linneo');
+const taxonrank = require('./api/dwc_taxon/taxonrank');
+const taxonomicstatus = require('./api/dwc_taxon/taxonomicstatus');
+const taxon = require('./api/dwc_taxon/taxon');
+
+//occurrence
+const organismquantitytype = require('./api/dwc_occurrence/organismquantitytype');
+const lifestage = require('./api/dwc_occurrence/lifestage');
+const reproductivecondition = require('./api/dwc_occurrence/reproductivecondition');
+const sex = require('./api/dwc_occurrence/sex');
+const establishementmeans = require('./api/dwc_occurrence/establishementmeans');
+const occurrence = require('./api/dwc_occurrence/occurrence');
+
+//organism
+const organism = require('./api/dwc_organism/organism');
+//event
+const event = require('./api/dwc_event/event');
+//divpolitica
+const divpolitica = require('./api/dwc_divpolitica/divpolitica');
+//recordlevel
+const recordlevel = require('./api/dwc_recordlevel/recordlevel');
+
+//geologicalcontext
+const eon = require('./api/dwc_geologicalcontext/eon');
+const era = require('./api/dwc_geologicalcontext/era');
+const period = require('./api/dwc_geologicalcontext/period');
+const epoch = require('./api/dwc_geologicalcontext/epoch');
+const geologicalcontext = require('./api/dwc_geologicalcontext/geologicalcontext');
+
+//multimedia
+const typemedia = require('./api/mul_multimedia/typemedia');
+const multimedia = require('./api/mul_multimedia/multimedia');
+
+//conserva
+const proceso = require('./api/cons_conserva/proceso');
+const conserva = require('./api/cons_conserva/conserva');
+
+//institution
+const institution = require('./api/usu_institution/institution');
+const area = require('./api/usu_institution/area');
+const entidad = require('./api/usu_institution/entidad');
+
 
 // view engine setup
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'jade');
+//app.set('views', path.join(__dirname, 'views'));
+//app.set('view engine', 'jade');
 
 app.use(logger('dev'));
 app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.urlencoded({
+  extended: false
+}));
+app.use(cookieParser("process.env.COOKIE_SECRET"));
 
-app.use('/', indexRouter);
-app.use('/users', usersRouter);
+//temporales
+app.use('/api/stickers', stickers);
+app.use('/api/persons', persons);
+
+//users
+app.use('/api/rols', rols);
+app.use('/api/users', users);
+app.use('/auth', auth);
+
+//identification
+app.use('/api/verifications', verifications);
+app.use('/api/identification', identification);
+
+//location
+app.use('/api/continent', continent);
+app.use('/api/waterbody', waterbody);
+app.use('/api/island', island);
+app.use('/api/geodeticdatum', geodeticdatum);
+app.use('/api/georeferenceverificationstatus', georeferenceverificationstatus);
+app.use('/api/location', location);
+
+//taxon
+app.use('/api/linneo', linneo);
+app.use('/api/taxonrank', taxonrank);
+app.use('/api/taxonomicstatus', taxonomicstatus);
+app.use('/api/taxon', taxon);
+
+//occurrence
+app.use('/api/organismquantitytype', organismquantitytype);
+app.use('/api/lifestage', lifestage);
+app.use('/api/reproductivecondition', reproductivecondition);
+app.use('/api/sex', sex);
+app.use('/api/establishmentmeans', establishementmeans);
+app.use('/api/occurrence', occurrence);
+
+//organism
+app.use('/api/organism', organism);
+//event
+app.use('/api/event', event);
+//divpolitica
+app.use('/api/divpolitica', divpolitica);
+//recordlevel
+app.use('/api/recordlevel', recordlevel);
+
+//geologicalcontext
+app.use('/api/eon', eon);
+app.use('/api/era', era);
+app.use('/api/period', period);
+app.use('/api/epoch', epoch);
+app.use('/api/geologicalcontext', geologicalcontext);
+
+//multimedia
+app.use('/api/typemedia', typemedia);
+app.use('/api/multimedia', multimedia);
+
+//conserva
+app.use('/api/proceso', proceso);
+app.use('/api/conserva', conserva);
+
+//institution
+app.use('/api/institution', institution);
+app.use('/api/area', area);
+app.use('/api/entidad', entidad);
+
+//SESSIONS
+app.use(session({
+  secret: 'ESTO ES SECRETO',
+  resave: true,
+  saveUninitialized: true
+}))
+
+app.get('/', (req, res) => {
+  req.session.cuenta = req.session.cuenta ? req.session.cuenta + 1 : 1;
+  res.send('pagina vista' + req.session.cuenta);
+});
+
+//app.use(express.static(path.join(__dirname, 'public')));
+
+//app.use('/', indexRouter);
+//app.use('/users', usersRouter);
 
 // catch 404 and forward to error handler
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
   next(createError(404));
 });
 
 // error handler
-app.use(function(err, req, res, next) {
+app.use(function (err, req, res, next) {
   // set locals, only providing error in development
-  res.locals.message = err.message;
-  res.locals.error = req.app.get('env') === 'development' ? err : {};
+  //res.locals.message = err.message;
+  //res.locals.error = req.app.get('env') === 'development' ? err : {};
 
   // render the error page
   res.status(err.status || 500);
-  res.render('error');
+  //res.render('error');
+  res.json({
+    message: err.message,
+    //error: req.app.get('env') === 'development' ? err : {}
+    error: err.status
+  })
 });
 
 module.exports = app;
