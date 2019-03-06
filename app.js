@@ -21,7 +21,7 @@ const auth = require('./auth/index');
 
 //identification
 const verifications = require('./api/dwc_identification/verifications');
-const identification = require('./api/dwc_identification/identification');
+const identifications = require('./api/dwc_identification/identification');
 
 //location
 const continent = require('./api/dwc_location/continent');
@@ -36,6 +36,13 @@ const linneo = require('./api/dwc_taxon/linneo');
 const taxonrank = require('./api/dwc_taxon/taxonrank');
 const taxonomicstatus = require('./api/dwc_taxon/taxonomicstatus');
 const taxon = require('./api/dwc_taxon/taxon');
+const kingdom = require('./api/dwc_taxon/kingdom');
+const phylum = require('./api/dwc_taxon/phylum');
+const clase = require('./api/dwc_taxon/class');
+const order = require('./api/dwc_taxon/order');
+const family = require('./api/dwc_taxon/family');
+const genus = require('./api/dwc_taxon/genus');
+const specie = require('./api/dwc_taxon/specie');
 
 //occurrence
 const organismquantitytype = require('./api/dwc_occurrence/organismquantitytype');
@@ -97,7 +104,7 @@ app.use('/auth', auth);
 
 //identification
 app.use('/api/verifications', verifications);
-app.use('/api/identification', identification);
+app.use('/api/identifications', identifications);
 
 //location
 app.use('/api/continent', continent);
@@ -112,6 +119,13 @@ app.use('/api/linneo', linneo);
 app.use('/api/taxonrank', taxonrank);
 app.use('/api/taxonomicstatus', taxonomicstatus);
 app.use('/api/taxon', taxon);
+app.use('/api/kingdom', kingdom);
+app.use('/api/phylum', phylum);
+app.use('/api/class', clase);
+app.use('/api/order', order);
+app.use('/api/family', family);
+app.use('/api/genus', genus);
+app.use('/api/specie', specie);
 
 //occurrence
 app.use('/api/organismquantitytype', organismquantitytype);

@@ -19,6 +19,16 @@ router.get('/:lineoid', (req, res, next) => {
         }
     })
 });
+router.get('/lineo/:lineoid', (req, res, next) => {
+    queries.getLinneo1(req.params.lineoid).then(data => {
+        if (data) {
+            res.json(data);
+        } else {
+            res.status(404);
+            next(new Error('Not Found :('));
+        }
+    })
+});
 
 router.post('/', (req, res, next) => {
     queries.create(req.body).then(data => {

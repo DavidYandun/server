@@ -1,20 +1,16 @@
 const express = require('express');
 const router = express.Router();
-const queries = require('../../db/dwc_identification/identification.queries');
+const queries = require('../../db/dwc_taxon/order.queries');
 
-router.get('/collection', (req, res, next) => {
-    queries.collection().then(data => {
-        res.json(data);
-    })
-});
+
 router.get('/', (req, res) => {
     queries.getAll().then(data => {
         res.json(data);
     })
 });
 
-router.get('/:identificationid', (req, res, next) => {
-    queries.getOne(req.params.identificationid).then(data => {
+router.get('/:order', (req, res, next) => {
+    queries.getOne(req.params.order).then(data => {
         if (data) {
             res.json(data);
         } else {
@@ -24,21 +20,20 @@ router.get('/:identificationid', (req, res, next) => {
     })
 });
 
-
 router.post('/', (req, res, next) => {
     queries.create(req.body).then(data => {
         res.json(data[0]);
     })
 });
 
-router.put('/:identificationid', (req, res, next) => {
-    queries.update(req.params.identificationid, req.body).then(data => {
+router.put('/:order', (req, res, next) => {
+    queries.update(req.params.order, req.body).then(data => {
         res.json(data[0]);
     })
 });
 
-router.delete('/:identificationid', (req, res, next) => {
-    queries.delete(req.params.identificationid).then(() => {
+router.delete('/:order', (req, res, next) => {
+    queries.delete(req.params.order).then(() => {
         res.json({
             deleted: true
         });

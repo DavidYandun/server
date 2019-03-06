@@ -34,7 +34,9 @@ module.exports = {
     getAllWithRol(query) {
         //const knexQuery = knex('em_tab_usu_users');
         //const knexQuery = knex.from('em_tab_usu_users').innerJoin('em_tab_usu_rols', 'em_tab_usu_users.rolid', 'em_tab_usu_rols.rolid');
-        const knexQuery= knex('em_tab_usu_users').join('em_tab_usu_rols','em_tab_usu_users.rolid','em_tab_usu_rols.rolid').select('em_tab_usu_users.*','em_tab_usu_rols.name as rolname');
+        const knexQuery= knex('em_tab_usu_users')
+        .join('em_tab_usu_rols','em_tab_usu_users.rolid','em_tab_usu_rols.rolid')
+        .select('em_tab_usu_users.*','em_tab_usu_rols.name as rolname');
 
         if (query.email) {
             knexQuery.where('email', 'like', `%${query.email}%`);
