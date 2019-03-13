@@ -5,8 +5,11 @@ module.exports = {
         const knexQuery = knex('em_tab_dwc_class');
         return knexQuery;
     },
-    getOne(classe) {
-        return knex('em_tab_dwc_class').where('class', classe).first();
+    getFilter(phylum) {
+        return knex('em_tab_dwc_class').where('phylum', phylum);
+    },
+    getOne(classs) {
+        return knex('em_tab_dwc_class').where('class', classs).first();
     },
     create(classe) {
         return knex('em_tab_dwc_class').insert(classe, '*');

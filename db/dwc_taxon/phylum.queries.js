@@ -5,6 +5,9 @@ module.exports = {
         const knexQuery = knex('em_tab_dwc_phylum');
         return knexQuery;
     },
+    getFilter(kingdom) {
+        return knex('em_tab_dwc_phylum').where('kingdom', kingdom);
+    },
     getOne(phylum) {
         return knex('em_tab_dwc_phylum').where('phylum', phylum).first();
     },

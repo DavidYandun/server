@@ -30,6 +30,11 @@ const island = require('./api/dwc_location/island');
 const geodeticdatum = require('./api/dwc_location/geodeticdatum');
 const georeferenceverificationstatus = require('./api/dwc_location/georefverificationstatus');
 const location = require('./api/dwc_location/location');
+const country = require('./api/dwc_location/country');
+const stateprovince = require('./api/dwc_location/stateprovince');
+const county = require('./api/dwc_location/county');
+const municipality = require('./api/dwc_location/municipality');
+
 
 //taxon
 const linneo = require('./api/dwc_taxon/linneo');
@@ -60,6 +65,7 @@ const event = require('./api/dwc_event/event');
 const divpolitica = require('./api/dwc_divpolitica/divpolitica');
 //recordlevel
 const recordlevel = require('./api/dwc_recordlevel/recordlevel');
+const basisofrecord = require('./api/dwc_recordlevel/basisofrecord');
 
 //geologicalcontext
 const eon = require('./api/dwc_geologicalcontext/eon');
@@ -113,6 +119,10 @@ app.use('/api/island', island);
 app.use('/api/geodeticdatum', geodeticdatum);
 app.use('/api/georeferenceverificationstatus', georeferenceverificationstatus);
 app.use('/api/location', location);
+app.use('/api/country', country);
+app.use('/api/stateprovince', stateprovince);
+app.use('/api/county', county);
+app.use('/api/municipality', municipality);
 
 //taxon
 app.use('/api/linneo', linneo);
@@ -143,6 +153,7 @@ app.use('/api/event', event);
 app.use('/api/divpolitica', divpolitica);
 //recordlevel
 app.use('/api/recordlevel', recordlevel);
+app.use('/api/basisofrecord', basisofrecord);
 
 //geologicalcontext
 app.use('/api/eon', eon);

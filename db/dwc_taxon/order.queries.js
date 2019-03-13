@@ -5,6 +5,9 @@ module.exports = {
         const knexQuery = knex('em_tab_dwc_order');
         return knexQuery;
     },
+    getFilter(classs) {
+        return knex('em_tab_dwc_order').where('class', classs);
+    },
     getOne(order) {
         return knex('em_tab_dwc_order').where('order', order).first();
     },

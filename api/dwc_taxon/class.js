@@ -9,6 +9,17 @@ router.get('/', (req, res) => {
     })
 });
 
+router.get('/filter/:phylum', (req, res, next) => {
+    queries.getFilter(req.params.phylum).then(data => {
+        if (data) {
+            res.json(data);
+        } else {
+            res.status(404);
+            next(new Error('Not Found :('));
+        }
+    })
+});
+
 router.get('/:class', (req, res, next) => {
     queries.getOne(req.params.class).then(data => {
         if (data) {

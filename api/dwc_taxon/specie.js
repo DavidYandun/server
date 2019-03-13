@@ -8,6 +8,16 @@ router.get('/', (req, res) => {
         res.json(data);
     })
 });
+router.get('/filter/:genus', (req, res, next) => {
+    queries.getFilter(req.params.genus).then(data => {
+        if (data) {
+            res.json(data);
+        } else {
+            res.status(404);
+            next(new Error('Not Found :('));
+        }
+    })
+});
 
 router.get('/:specie', (req, res, next) => {
     queries.getOne(req.params.specie).then(data => {

@@ -5,6 +5,9 @@ module.exports = {
         const knexQuery = knex('em_tab_dwc_family');
         return knexQuery;
     },
+    getFilter(order) {
+        return knex('em_tab_dwc_family').where('order', order);
+    },
     getOne(family) {
         return knex('em_tab_dwc_family').where('family', family).first();
     },

@@ -8,6 +8,16 @@ router.get('/', (req, res) => {
         res.json(data);
     })
 });
+router.get('/filter/:order', (req, res, next) => {
+    queries.getFilter(req.params.order).then(data => {
+        if (data) {
+            res.json(data);
+        } else {
+            res.status(404);
+            next(new Error('Not Found :('));
+        }
+    })
+});
 
 router.get('/:family', (req, res, next) => {
     queries.getOne(req.params.family).then(data => {

@@ -5,6 +5,9 @@ module.exports = {
         const knexQuery = knex('em_tab_dwc_specie');
         return knexQuery;
     },
+    getFilter(genus) {
+        return knex('em_tab_dwc_specie').where('genus', genus);
+    },
     getOne(specie) {
         return knex('em_tab_dwc_specie').where('specie', specie).first();
     },

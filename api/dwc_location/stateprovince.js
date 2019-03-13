@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const queries = require('../../db/dwc_taxon/genus.queries');
+const queries = require('../../db/dwc_location/stateprovince.queries');
 
 
 router.get('/', (req, res) => {
@@ -8,8 +8,8 @@ router.get('/', (req, res) => {
         res.json(data);
     })
 });
-router.get('/filter/:family', (req, res, next) => {
-    queries.getFilter(req.params.family).then(data => {
+router.get('/filter/:country', (req, res, next) => {
+    queries.getFilter(req.params.country).then(data => {
         if (data) {
             res.json(data);
         } else {
@@ -18,9 +18,8 @@ router.get('/filter/:family', (req, res, next) => {
         }
     })
 });
-
-router.get('/:genus', (req, res, next) => {
-    queries.getOne(req.params.genus).then(data => {
+router.get('/:stateprovince', (req, res, next) => {
+    queries.getOne(req.params.stateprovince).then(data => {
         if (data) {
             res.json(data);
         } else {
@@ -36,14 +35,14 @@ router.post('/', (req, res, next) => {
     })
 });
 
-router.put('/:genus', (req, res, next) => {
-    queries.update(req.params.genus, req.body).then(data => {
+router.put('/:stateprovince', (req, res, next) => {
+    queries.update(req.params.stateprovince, req.body).then(data => {
         res.json(data[0]);
     })
 });
 
-router.delete('/:genus', (req, res, next) => {
-    queries.delete(req.params.genus).then(() => {
+router.delete('/:stateprovince', (req, res, next) => {
+    queries.delete(req.params.stateprovince).then(() => {
         res.json({
             deleted: true
         });

@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const queries = require('../../db/dwc_taxon/genus.queries');
+const queries = require('../../db/dwc_location/municipality.queries');
 
 
 router.get('/', (req, res) => {
@@ -8,8 +8,8 @@ router.get('/', (req, res) => {
         res.json(data);
     })
 });
-router.get('/filter/:family', (req, res, next) => {
-    queries.getFilter(req.params.family).then(data => {
+router.get('/filter/:county', (req, res, next) => {
+    queries.getFilter(req.params.county).then(data => {
         if (data) {
             res.json(data);
         } else {
@@ -19,8 +19,8 @@ router.get('/filter/:family', (req, res, next) => {
     })
 });
 
-router.get('/:genus', (req, res, next) => {
-    queries.getOne(req.params.genus).then(data => {
+router.get('/:municipality', (req, res, next) => {
+    queries.getOne(req.params.municipality).then(data => {
         if (data) {
             res.json(data);
         } else {
@@ -36,14 +36,14 @@ router.post('/', (req, res, next) => {
     })
 });
 
-router.put('/:genus', (req, res, next) => {
-    queries.update(req.params.genus, req.body).then(data => {
+router.put('/:municipality', (req, res, next) => {
+    queries.update(req.params.municipality, req.body).then(data => {
         res.json(data[0]);
     })
 });
 
-router.delete('/:genus', (req, res, next) => {
-    queries.delete(req.params.genus).then(() => {
+router.delete('/:municipality', (req, res, next) => {
+    queries.delete(req.params.municipality).then(() => {
         res.json({
             deleted: true
         });

@@ -9,6 +9,17 @@ router.get('/', (req, res) => {
     })
 });
 
+router.get('/filter/:kingdom', (req, res, next) => {
+    queries.getFilter(req.params.kingdom).then(data => {
+        if (data) {
+            res.json(data);
+        } else {
+            res.status(404);
+            next(new Error('Not Found :('));
+        }
+    })
+});
+
 router.get('/:phylum', (req, res, next) => {
     queries.getOne(req.params.phylum).then(data => {
         if (data) {
