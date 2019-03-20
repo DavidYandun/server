@@ -3,6 +3,8 @@ const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
+const formidable = require("express-formidable");
+const fileUpload =require('express-fileupload');
 
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
@@ -95,10 +97,10 @@ const entidad = require('./api/usu_institution/entidad');
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({
-  extended: false
+  extended: true
 }));
 app.use(cookieParser("process.env.COOKIE_SECRET"));
-
+app.use(fileUpload());
 //temporales
 app.use('/api/stickers', stickers);
 app.use('/api/persons', persons);
@@ -180,7 +182,7 @@ app.use(session({
   secret: 'ESTO ES SECRETO',
   resave: true,
   saveUninitialized: true
-}))
+}));
 
 app.get('/', (req, res) => {
   req.session.cuenta = req.session.cuenta ? req.session.cuenta + 1 : 1;

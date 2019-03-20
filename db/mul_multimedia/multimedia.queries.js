@@ -8,6 +8,9 @@ module.exports = {
     getOne(multimediaid) {
         return knex('em_tab_mul_multimedia').where('multimediaid', multimediaid).first();
     },
+    getMax() {
+        return knex('em_tab_mul_multimedia').max('multimediaid as multimediaid').first();
+    },
     create(organism) {
         return knex('em_tab_mul_multimedia').insert(organism, '*');
     },
