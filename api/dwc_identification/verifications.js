@@ -5,7 +5,7 @@ const queries = require('../../db/dwc_identification/verification.queries');
 
 function validVerification(verification) {
     const hasName = typeof verification.verificationstatus == 'string' && verification.verificationstatus.trim() != '';
-    const hasDescription = typeof verification.description == 'string' && verification.description.trim() != '';
+    const hasDescription = typeof verification.description == 'string';
     return hasName && hasDescription;
 }
 
@@ -30,9 +30,9 @@ router.post('/', (req, res, next) => {
     if (validVerification(req.body)) {
         //insert into db
         queries.create(req.body).then(data => {
-            res.json(data[0]);
+            res.json(data[0]);  
         })
-    } else {
+    } else {    
         next(new Error('Invalid verification post'));
     }
 });

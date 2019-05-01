@@ -8,6 +8,9 @@ module.exports = {
     getOne(organismid) {
         return knex('em_tab_dwc_organism').where('organismid', organismid).first();
     },
+    getOneId(identificationid) {
+        return knex('em_tab_dwc_organism').where('identificationid', identificationid).first();
+    },
     create(organism) {
         return knex('em_tab_dwc_organism').insert(organism, '*');
     },

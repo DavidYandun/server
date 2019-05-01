@@ -8,6 +8,9 @@ module.exports = {
     getOne(recordlevelid) {
         return knex('em_tab_dwc_record_level').where('recordlevelid', recordlevelid).first();
     },
+    getOneId(identificationid) {
+        return knex('em_tab_dwc_record_level').where('identificationid', identificationid).first();
+    },
     create(recordlevelid) {
         return knex('em_tab_dwc_record_level').insert(recordlevelid, '*');
     },

@@ -20,7 +20,7 @@ router.get('/:taxonid', (req, res, next) => {
     })
 });
 router.get('/id/:identificationid', (req, res, next) => {
-    queries.getOne(req.params.identificationid).then(data => {
+    queries.getOneId(req.params.identificationid).then(data => {
         if (data) {
             res.json(data);
         } else {
@@ -31,9 +31,17 @@ router.get('/id/:identificationid', (req, res, next) => {
 });
 
 router.post('/', (req, res, next) => {
-    queries.create(req.body).then(data => {
-        res.json(data[0]);
-    })
+
+    queries.getOneId(req.body.identificationid).then(data => {
+        if (!data) {
+            queries.create(req.body).then(data => {
+                res.json(data[0]);
+            })
+        } else {
+            next(new Error('ESTE TAXÓN YA FUÉ REGISTRADO'));
+        }
+    });
+
 });
 
 router.put('/:taxonid', (req, res, next) => {

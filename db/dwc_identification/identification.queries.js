@@ -8,8 +8,8 @@ module.exports = {
     getOne(identificationid) {
         return knex('em_tab_dwc_identification').where('identificationid', identificationid).first();
     },
-    create(identificationid) {
-        return knex('em_tab_dwc_identification').insert(identificationid, '*');
+    create(identification) {
+        return knex('em_tab_dwc_identification').insert(identification, '*');
     },
     update(identificationid, identifications) {
         return knex('em_tab_dwc_identification').where('identificationid', identificationid).update(identifications, '*');
@@ -20,14 +20,17 @@ module.exports = {
     getCollection() {
         const knexQuery = knex('em_tab_dwc_identification')
             .leftJoin('em_tab_dwc_taxon', 'em_tab_dwc_identification.identificationid', 'em_tab_dwc_taxon.identificationid')
-            .leftJoin('em_tab_dwc_event', 'em_tab_dwc_identification.identificationid', 'em_tab_dwc_event.identificationid')
-            .leftJoin('em_tab_mul_multimedia', 'em_tab_dwc_identification.identificationid', 'em_tab_mul_multimedia.identificationid')
-            .select('em_tab_dwc_identification.identificationid', 'verificationstatus', 'identifiedby',
-                'lineoid', 'kingdom','phylum','class' ,'order','family','genus','specie','taxonrank', 'scientificname', 'vernacularname',
-                'fieldnumber',
-                'typemedia', 'name as medianame', 'url');
-                
-
+            .leftJoin('em_tab_mul_multimedia','em_tab_dwc_identification.identificationid', 'em_tab_mul_multimedia.identificationid')
+            .where('em_tab_mul_multimedia.principal',true).orWhere('em_tab_mul_multimedia.principal',null)
+            .select('em_tab_dwc_identification.identificationid', 'verificationstatus', 'identifiedby','kingdom','phylum','class' ,'order','family','genus','specie','taxonrank', 'scientificname', 'vernacularname',
+               'url','em_tab_mul_multimedia.name as medianame');
+        return knexQuery;
+    },
+    getReinos(kingdom){
+        const knexQuery = knex('em_tab_dwc_identification')
+        .leftJoin('em_tab_dwc_taxon', 'em_tab_dwc_identification.identificationid', 'em_tab_dwc_taxon.identificationid')
+        .where('em_tab_dwc_taxon.kingdom',kingdom)
+        .select('em_tab_dwc_identification.identificationid', 'identifiedby','kingdom','phylum','class' ,'order','family','genus','specie','taxonrank', 'scientificname', 'vernacularname');
         return knexQuery;
     }
 }

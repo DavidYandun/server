@@ -8,6 +8,9 @@ module.exports = {
     getOne(locationid) {
         return knex('em_tab_dwc_location').where('locationid', locationid).first();
     },
+    getOneId(identificationid) {
+        return knex('em_tab_dwc_location').where('identificationid', identificationid).first();
+    },
     create(locationid) {
         return knex('em_tab_dwc_location').insert(locationid, '*');
     },

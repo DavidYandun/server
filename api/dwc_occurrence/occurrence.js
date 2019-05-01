@@ -19,11 +19,27 @@ router.get('/:occurrenceid', (req, res, next) => {
         }
     })
 });
+router.get('/id/:identificationid', (req, res, next) => {
+    queries.getOneId(req.params.identificationid).then(data => {
+        if (data) {
+            res.json(data);
+        } else {
+            res.status(404);
+            next(new Error('Not Found :('));
+        }
+    })
+});
 
 router.post('/', (req, res, next) => {
-    queries.create(req.body).then(data => {
-        res.json(data[0]);
-    })
+    queries.getOneId(req.body.identificationid).then(data => {
+        if (!data) {
+            queries.create(req.body).then(data => {
+                res.json(data[0]);
+            })
+        } else {
+            next(new Error('ESTA OCCURRENCE YA FUÉ REGISTRADA'));
+        }
+    });
 });
 
 router.put('/:occurrenceid', (req, res, next) => {

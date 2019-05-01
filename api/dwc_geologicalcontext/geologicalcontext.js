@@ -19,11 +19,27 @@ router.get('/:geologicalcontextid', (req, res, next) => {
         }
     })
 });
+router.get('/id/:identificationid', (req, res, next) => {
+    queries.getOneId(req.params.identificationid).then(data => {
+        if (data) {
+            res.json(data);
+        } else {
+            res.status(404);
+            next(new Error('Not Found :('));
+        }
+    })
+});
 
 router.post('/', (req, res, next) => {
-    queries.create(req.body).then(data => {
+    queries.getOneId(req.body.identificationid).then(data => {
+        if (!data) {
+            queries.create(req.body).then(data => {
         res.json(data[0]);
-    })
+            })
+        } else {
+            next(new Error('ESTE GEOLOGICAL CONTEXT YA FUÉ REGISTRADO'));
+        }
+    });
 });
 
 router.put('/:geologicalcontextid', (req, res, next) => {

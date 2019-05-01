@@ -4,7 +4,22 @@ const queries = require('../../db/dwc_identification/identification.queries');
 
 router.get('/collection', (req, res, next) => {
     queries.getCollection().then(data => {
-        res.json(data);
+        if (data) {
+            res.json(data);
+        } else {
+            res.status(404);
+            next(new Error('No se puede'));
+        }
+    })
+});
+router.get('/collection/:kingdom', (req, res, next) => {
+    queries.getReinos(req.params.kingdom).then(data => {
+        if (data) {
+            res.json(data);
+        } else {
+            res.status(404);
+            next(new Error('No se puede'));
+        }
     })
 });
 router.get('/', (req, res) => {

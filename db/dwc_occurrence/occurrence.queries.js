@@ -8,6 +8,9 @@ module.exports = {
     getOne(occurrenceid) {
         return knex('em_tab_dwc_occurrence').where('occurrenceid', occurrenceid).first();
     },
+    getOneId(identificationid) {
+        return knex('em_tab_dwc_occurrence').where('identificationid', identificationid).first();
+    },
     create(occurrence) {
         return knex('em_tab_dwc_occurrence').insert(occurrence, '*');
     },
