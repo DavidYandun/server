@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const queries = require('../../db/mul_multimedia/typemedia.queries');
-
+const authMiddleware = require('../../auth/middleware');
 
 router.get('/', (req, res) => {
     queries.getAll().then(data => {
@@ -20,19 +20,19 @@ router.get('/:typemedia', (req, res, next) => {
     })
 });
 
-router.post('/', (req, res, next) => {
+router.post('/', authMiddleware.adminAccess, (req, res, next) => {
     queries.create(req.body).then(data => {
         res.json(data[0]);
     })
 });
 
-router.put('/:typemedia', (req, res, next) => {
+router.put('/:typemedia', authMiddleware.adminAccess, (req, res, next) => {
     queries.update(req.params.typemedia, req.body).then(data => {
         res.json(data[0]);
     })
 });
 
-router.delete('/:typemedia', (req, res, next) => {
+router.delete('/:typemedia', authMiddleware.adminAccess, (req, res, next) => {
     queries.delete(req.params.typemedia).then(() => {
         res.json({
             deleted: true

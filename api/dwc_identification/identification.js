@@ -1,9 +1,11 @@
 const express = require('express');
 const router = express.Router();
 const queries = require('../../db/dwc_identification/identification.queries');
+const authMiddleware = require('../../auth/middleware');
 
 router.get('/collection', (req, res, next) => {
     queries.getCollection().then(data => {
+
         if (data) {
             res.json(data);
         } else {
@@ -40,19 +42,19 @@ router.get('/:identificationid', (req, res, next) => {
 });
 
 
-router.post('/', (req, res, next) => {
+router.post('/',authMiddleware.adminAccess, (req, res, next) => {
     queries.create(req.body).then(data => {
         res.json(data[0]);
     })
 });
 
-router.put('/:identificationid', (req, res, next) => {
+router.put('/:identificationid',authMiddleware.adminAccess, (req, res, next) => {
     queries.update(req.params.identificationid, req.body).then(data => {
         res.json(data[0]);
     })
 });
 
-router.delete('/:identificationid', (req, res, next) => {
+router.delete('/:identificationid',authMiddleware.adminAccess, (req, res, next) => {
     queries.delete(req.params.identificationid).then(() => {
         res.json({
             deleted: true

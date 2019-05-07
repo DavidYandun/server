@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const queries = require('../../db/dwc_occurrence/establishementmeans.queries');
-
+const authMiddleware = require('../../auth/middleware');
 
 router.get('/', (req, res) => {
     queries.getAll().then(data => {
@@ -20,19 +20,19 @@ router.get('/:establishementmeans', (req, res, next) => {
     })
 });
 
-router.post('/', (req, res, next) => {
+router.post('/', authMiddleware.adminAccess, (req, res, next) => {
     queries.create(req.body).then(data => {
         res.json(data[0]);
     })
 });
 
-router.put('/:establishementmeans', (req, res, next) => {
+router.put('/:establishementmeans', authMiddleware.adminAccess, (req, res, next) => {
     queries.update(req.params.establishementmeans, req.body).then(data => {
         res.json(data[0]);
     })
 });
 
-router.delete('/:establishementmeans', (req, res, next) => {
+router.delete('/:establishementmeans', authMiddleware.adminAccess, (req, res, next) => {
     queries.delete(req.params.establishementmeans).then(() => {
         res.json({
             deleted: true

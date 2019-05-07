@@ -6,7 +6,12 @@ const User = require('../db/users/users.queries');
 
 router.get('/', (req, res) => {
     res.json({
-        message: 'lock'
+        message: '🔐'
+    });
+})
+router.get('/signup', (req, res) => {
+    res.json({
+        message: '✅'
     });
 })
 
@@ -16,91 +21,81 @@ function validateUser(user) {
     const validPassword = typeof user.password == 'string' &&
         user.password.trim() != '' &&
         user.password.trim().length >= 6;
-    return validEmail && validEmail;
+    return validEmail && validPassword;
 }
 
-router.post('/signup', (req, res, next) => {
-    if (validateUser(req.body)) {
-        User.getOneByEmail(req.body.email).then(data => {
-            console.log('data', data);
-            //si el usuario no se encuentra
-            if (!data) {
-                //es un email unico
-                //hash password
-                bcrypt.hash(req.body.password, 10).then((hash) => {
-                    //store hash in your passwordDB
-                    //insert user into 
-                    const user = {
-                        rolid: req.body.rolid,
-                        personid: req.body.personid,
-                        email: req.body.email,
-                        password: hash,
-                        status: true
-                    };
-                    User.create(user).then(rolid => {
-                        res.json({
-                            rolid,
-                            message: 'check'
-                        });
-                    });
-                });
-                //redirect
-            } else {
-                //email en uso
-                next(new Error('email en uso'));
-            }
-        });
-    } else {
-        next(new Error('Invalid user'));
-    }
-});
-
 router.post('/login', (req, res, next) => {
-    console.log(req.body);
-    if (validateUser(req.body)) {  
-        //check to see if in DB
+
+    if (validateUser(req.body)) {
+        //ver si existe en la DB
         User.getOneByEmail(req.body.email).then(data => {
             console.log('user', data);
             if (data) {
-                //compare password with hashed password
+                //comparar password with hashed password
                 bcrypt.compare(req.body.password, data.password).then((result) => {
-                    //if the passwords matched
+                    //si la pasword coincide
                     if (result) {
                         //setting the 'set-cookie' header
-                        //const isSecure=req.app.get('env') != 'development';
+                        const isSecure = req.app.get('env') != 'development';
                         res.cookie('userid', data.userid, {
                             httpOnly: true,
-                            secure: true,//seguridad cuando esté en producción
-                            //secure: isSecure,
+                            secure: isSecure,
+                            //secure:true,
                             signed: true
+                        });
+                        res.cookie('rolid', data.rolid, {
+                            httpOnly: true,
+                            secure: isSecure,
+                            //secure:true,
+                            signed: true
+
                         });
                         res.json({
                             //result, //result==true
-                            message: 'Logged in...',
+                            message: 'Iniciaste sesión... ✅',
                             success: true
                         });
                     } else {
-                        next(new Error('Invalid password'));
+                        next(new Error('Contraseña incorrecta 🔑'));
                         res.json({
-                            message: 'Invalid password',
+                            message: 'Contraseña incorrecta 🔑',
                             success: false
                         });
                     }
                 });
             } else {
-                next(new Error('Invalid user'));
+                next(new Error('El usuario no existe 😢'));
                 res.json({
-                    message: 'Invalid user',
+                    message: 'El usuario no existe 😢',
                     success: false
                 });
             }
         });
     } else {
-        next(new Error('Invalid login'));
+        next(new Error('Inicio de sesión incorrecto ❌'));
         res.json({
-            message: 'Invalid login',
+            message: 'Inicio de sesión incorrecto ❌',
             success: false
         });
     }
 });
+router.get('/logout', (req, res) => {
+    res.clearCookie('userid')
+    res.clearCookie('rolid')
+    res.json({
+        message: 'Sesión cerrada'
+    })
+})
+
+router.get('/loggedin', (req, res) => {
+    if (req.signedCookies.userid) {
+        res.json({
+            loggedin: true
+        });
+    } else {
+        res.json({
+            loggedin: false
+        });
+    }
+})
 module.exports = router;

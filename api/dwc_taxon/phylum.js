@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const queries = require('../../db/dwc_taxon/phylum.queries');
-
+const authMiddleware=require('../../auth/middleware');
 
 router.get('/', (req, res) => {
     queries.getAll().then(data => {
@@ -31,19 +31,19 @@ router.get('/:phylum', (req, res, next) => {
     })
 });
 
-router.post('/', (req, res, next) => {
+router.post('/',authMiddleware.adminAccess, (req, res, next) => {
     queries.create(req.body).then(data => {
         res.json(data[0]);
     })
 });
 
-router.put('/:phylum', (req, res, next) => {
+router.put('/:phylum',authMiddleware.adminAccess, (req, res, next) => {
     queries.update(req.params.phylum, req.body).then(data => {
         res.json(data[0]);
     })
 });
 
-router.delete('/:phylum', (req, res, next) => {
+router.delete('/:phylum',authMiddleware.adminAccess, (req, res, next) => {
     queries.delete(req.params.phylum).then(() => {
         res.json({
             deleted: true

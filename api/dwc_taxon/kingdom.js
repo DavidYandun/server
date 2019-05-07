@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const queries = require('../../db/dwc_taxon/kingdom.queries');
-
+const authMiddleware=require('../../auth/middleware');
 
 router.get('/', (req, res) => {
     queries.getAll().then(data => {
@@ -20,19 +20,19 @@ router.get('/:kingdom', (req, res, next) => {
     })
 });
 
-router.post('/', (req, res, next) => {
+router.post('/',authMiddleware.adminAccess, (req, res, next) => {
     queries.create(req.body).then(data => {
         res.json(data[0]);
     })
 });
 
-router.put('/:kingdom', (req, res, next) => {
+router.put('/:kingdom',authMiddleware.adminAccess, (req, res, next) => {
     queries.update(req.params.kingdom, req.body).then(data => {
         res.json(data[0]);
     })
 });
 
-router.delete('/:kingdom', (req, res, next) => {
+router.delete('/:kingdom',authMiddleware.adminAccess, (req, res, next) => {
     queries.delete(req.params.kingdom).then(() => {
         res.json({
             deleted: true

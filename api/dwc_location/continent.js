@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const queries = require('../../db/dwc_location/continent.queries');
-
+const authMiddleware = require('../../auth/middleware');
 
 router.get('/', (req, res) => {
     queries.getAll().then(data => {
@@ -20,19 +20,19 @@ router.get('/:continent', (req, res, next) => {
     })
 });
 
-router.post('/', (req, res, next) => {
+router.post('/', authMiddleware.adminAccess, (req, res, next) => {
     queries.create(req.body).then(data => {
         res.json(data[0]);
     })
 });
 
-router.put('/:continent', (req, res, next) => {
+router.put('/:continent', authMiddleware.adminAccess, (req, res, next) => {
     queries.update(req.params.continent, req.body).then(data => {
         res.json(data[0]);
     })
 });
 
-router.delete('/:continent', (req, res, next) => {
+router.delete('/:continent', authMiddleware.adminAccess, (req, res, next) => {
     queries.delete(req.params.continent).then(() => {
         res.json({
             deleted: true

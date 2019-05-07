@@ -1,8 +1,13 @@
-const createError = require('http-errors');
 const express = require('express');
 const path = require('path');
-const cookieParser = require('cookie-parser');
+const createError = require('http-errors');
+
 const logger = require('morgan');
+const cookieParser = require('cookie-parser');
+const bodyParser=require('body-parser');
+const cors=require('cors');
+
+
 const formidable = require("express-formidable");
 const fileUpload =require('express-fileupload');
 
@@ -20,6 +25,7 @@ const persons = require('./api/persons');
 const rols = require('./api/users/rols');
 const users = require('./api/users/users');
 const auth = require('./auth/index');
+const authMiddleware=require('./auth/middleware');
 
 //identification
 const verifications = require('./api/dwc_identification/verifications');
@@ -99,15 +105,19 @@ app.use(express.json());
 app.use(express.urlencoded({
   extended: true
 }));
-app.use(cookieParser("process.env.COOKIE_SECRET"));
+app.use(cookieParser('keyboard_cat'));
 app.use(fileUpload());
+app.use(cors({
+  origin:'http://localhost:4200/',
+  credentials:true
+}));
 //temporales
 app.use('/api/stickers', stickers);
 app.use('/api/persons', persons);
 
 //users
 app.use('/api/rols', rols);
-app.use('/api/users', users);
+app.use('/api/users',authMiddleware.adminAccess, users);
 app.use('/auth', auth);
 
 //identification
@@ -201,17 +211,11 @@ app.use(function (req, res, next) {
 
 // error handler
 app.use(function (err, req, res, next) {
-  // set locals, only providing error in development
-  //res.locals.message = err.message;
-  //res.locals.error = req.app.get('env') === 'development' ? err : {};
-
-  // render the error page
-  res.status(err.status || 500);
-  //res.render('error');
+  res.status(err.status ||res.statusCode|| 500);
   res.json({
     message: err.message,
-    //error: req.app.get('env') === 'development' ? err : {}
-    error: err.status
+    error: req.app.get('env') === 'development' ? err : {}
+    //error: err.status
   })
 });
 

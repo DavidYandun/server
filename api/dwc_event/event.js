@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const queries = require('../../db/dwc_event/event.queries');
-
+const authMiddleware = require('../../auth/middleware');
 
 router.get('/', (req, res) => {
     queries.getAll().then(data => {
@@ -30,19 +30,19 @@ router.get('/id/:identificationid', (req, res, next) => {
     })
 });
 
-router.post('/', (req, res, next) => {
+router.post('/', authMiddleware.adminAccess, (req, res, next) => {
     queries.create(req.body).then(data => {
         res.json(data[0]);
     })
 });
 
-router.put('/:eventid', (req, res, next) => {
+router.put('/:eventid', authMiddleware.adminAccess, (req, res, next) => {
     queries.update(req.params.eventid, req.body).then(data => {
         res.json(data[0]);
     })
 });
 
-router.delete('/:eventid', (req, res, next) => {
+router.delete('/:eventid', authMiddleware.adminAccess, (req, res, next) => {
     queries.delete(req.params.eventid).then(() => {
         res.json({
             deleted: true

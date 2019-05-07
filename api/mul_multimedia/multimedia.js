@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const queries = require('../../db/mul_multimedia/multimedia.queries');
 const path = require('path');
-
+const authMiddleware = require('../../auth/middleware');
 router.get('/max', (req, res) => {
     queries.getMax().then(data => {
         res.json(data);
@@ -52,13 +52,13 @@ router.get('/img/:img', (req, res) => {
     return res.sendFile(ruta);
 })
 
-router.post('/', (req, res, next) => {
+router.post('/', authMiddleware.adminAccess, (req, res, next) => {
     queries.create(req.body).then(data => {
         res.json(data[0]);
     })
 });
 
-router.post('/upload', function (req, res) {
+router.post('/upload', authMiddleware.adminAccess, function (req, res) {
 
     if (Object.keys(req.files).length == 0) {
         return res.status(400).send('No hay archivos subidos.');
@@ -76,13 +76,13 @@ router.post('/upload', function (req, res) {
     });
 });
 
-router.put('/:multimediaid', (req, res, next) => {
+router.put('/:multimediaid', authMiddleware.adminAccess, (req, res, next) => {
     queries.update(req.params.multimediaid, req.body).then(data => {
         res.json(data[0]);
     })
 });
 
-router.delete('/:multimediaid', (req, res, next) => {
+router.delete('/:multimediaid', authMiddleware.adminAccess, (req, res, next) => {
     queries.delete(req.params.multimediaid).then(() => {
         res.json({
             deleted: true

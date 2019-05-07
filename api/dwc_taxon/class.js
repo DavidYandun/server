@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const queries = require('../../db/dwc_taxon/class.queries');
+const authMiddleware=require('../../auth/middleware');
 
 
 router.get('/', (req, res) => {
@@ -31,19 +32,19 @@ router.get('/:class', (req, res, next) => {
     })
 });
 
-router.post('/', (req, res, next) => {
+router.post('/',authMiddleware.adminAccess, (req, res, next) => {
     queries.create(req.body).then(data => {
         res.json(data[0]);
     })
 });
 
-router.put('/:class', (req, res, next) => {
+router.put('/:class',authMiddleware.adminAccess, (req, res, next) => {
     queries.update(req.params.class, req.body).then(data => {
         res.json(data[0]);
     })
 });
 
-router.delete('/:class', (req, res, next) => {
+router.delete('/:class',authMiddleware.adminAccess, (req, res, next) => {
     queries.delete(req.params.class).then(() => {
         res.json({
             deleted: true

@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const queries = require('../../db/dwc_taxon/taxon.queries');
+const authMiddleware=require('../../auth/middleware');
 
 
 router.get('/', (req, res) => {
@@ -30,7 +31,7 @@ router.get('/id/:identificationid', (req, res, next) => {
     })
 });
 
-router.post('/', (req, res, next) => {
+router.post('/',authMiddleware.adminAccess, (req, res, next) => {
 
     queries.getOneId(req.body.identificationid).then(data => {
         if (!data) {
@@ -44,13 +45,13 @@ router.post('/', (req, res, next) => {
 
 });
 
-router.put('/:taxonid', (req, res, next) => {
+router.put('/:taxonid',authMiddleware.adminAccess, (req, res, next) => {
     queries.update(req.params.taxonid, req.body).then(data => {
         res.json(data[0]);
     })
 });
 
-router.delete('/:taxonid', (req, res, next) => {
+router.delete('/:taxonid',authMiddleware.adminAccess, (req, res, next) => {
     queries.delete(req.params.taxonid).then(() => {
         res.json({
             deleted: true

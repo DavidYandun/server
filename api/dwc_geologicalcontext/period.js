@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const queries = require('../../db/dwc_geologicalcontext/period.queries');
-
+const authMiddleware = require('../../auth/middleware');
 
 router.get('/', (req, res) => {
     queries.getAll().then(data => {
@@ -20,19 +20,19 @@ router.get('/:name', (req, res, next) => {
     })
 });
 
-router.post('/', (req, res, next) => {
+router.post('/',authMiddleware.adminAccess, (req, res, next) => {
     queries.create(req.body).then(data => {
         res.json(data[0]);
     })
 });
 
-router.put('/:name', (req, res, next) => {
+router.put('/:name',authMiddleware.adminAccess, (req, res, next) => {
     queries.update(req.params.name, req.body).then(data => {
         res.json(data[0]);
     })
 });
 
-router.delete('/:name', (req, res, next) => {
+router.delete('/:name',authMiddleware.adminAccess, (req, res, next) => {
     queries.delete(req.params.name).then(() => {
         res.json({
             deleted: true

@@ -3,6 +3,7 @@ const router = express.Router();
 const queries = require('../../db/users/users.queries');
 const bcrypt = require('bcryptjs');
 const path = require('path');
+const authMiddleware=require('../../auth/middleware');
 
 function isValidId(req, res, next) {
     if (!isNaN(req.params.userid)) return next();
@@ -31,7 +32,13 @@ router.get('/rol', (req, res) => {
     })
 });
 
-router.get('/', (req, res) => {
+router.get('/perfil/:email',(req,res)=>{
+    queries.getPerfil(req.params.email).then(data=>{
+        res.json(data);
+    })
+})
+
+router.get('/',authMiddleware.adminAccess, (req, res) => {
     const {
         email
     } = req.query;
@@ -92,7 +99,8 @@ router.post('/', (req, res, next) => {
                                 direction: req.body.direction,
                                 phone: req.body.phone,
                                 password: hash,
-                                url:req.body.url
+                                url:req.body.url,
+                                created_at: new Date()
                             };
                             queries.create(user).then(data => {
                                 res.json({

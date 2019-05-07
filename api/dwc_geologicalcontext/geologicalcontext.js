@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const queries = require('../../db/dwc_geologicalcontext/geologicalcontext.queries');
-
+const authMiddleware = require('../../auth/middleware');
 
 router.get('/', (req, res) => {
     queries.getAll().then(data => {
@@ -30,7 +30,7 @@ router.get('/id/:identificationid', (req, res, next) => {
     })
 });
 
-router.post('/', (req, res, next) => {
+router.post('/',authMiddleware.adminAccess, (req, res, next) => {
     queries.getOneId(req.body.identificationid).then(data => {
         if (!data) {
             queries.create(req.body).then(data => {
@@ -42,13 +42,13 @@ router.post('/', (req, res, next) => {
     });
 });
 
-router.put('/:geologicalcontextid', (req, res, next) => {
+router.put('/:geologicalcontextid',authMiddleware.adminAccess, (req, res, next) => {
     queries.update(req.params.geologicalcontextid, req.body).then(data => {
         res.json(data[0]);
     })
 });
 
-router.delete('/:geologicalcontextid', (req, res, next) => {
+router.delete('/:geologicalcontextid',authMiddleware.adminAccess, (req, res, next) => {
     queries.delete(req.params.geologicalcontextid).then(() => {
         res.json({
             deleted: true

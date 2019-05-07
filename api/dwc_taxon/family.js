@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const queries = require('../../db/dwc_taxon/family.queries');
+const authMiddleware=require('../../auth/middleware');
 
 
 router.get('/', (req, res) => {
@@ -30,19 +31,19 @@ router.get('/:family', (req, res, next) => {
     })
 });
 
-router.post('/', (req, res, next) => {
+router.post('/',authMiddleware.adminAccess, (req, res, next) => {
     queries.create(req.body).then(data => {
         res.json(data[0]);
     })
 });
 
-router.put('/:family', (req, res, next) => {
+router.put('/:family',authMiddleware.adminAccess, (req, res, next) => {
     queries.update(req.params.family, req.body).then(data => {
         res.json(data[0]);
     })
 });
 
-router.delete('/:family', (req, res, next) => {
+router.delete('/:family',authMiddleware.adminAccess, (req, res, next) => {
     queries.delete(req.params.family).then(() => {
         res.json({
             deleted: true

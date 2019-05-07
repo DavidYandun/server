@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const queries = require('../../db/dwc_organism/organism.queries');
+const authMiddleware = require('../../auth/middleware');
 
 
 router.get('/', (req, res) => {
@@ -30,7 +31,7 @@ router.get('/id/:identificationid', (req, res, next) => {
     })
 });
 
-router.post('/', (req, res, next) => {
+router.post('/', authMiddleware.adminAccess, (req, res, next) => {
     queries.getOneId(req.body.identificationid).then(data => {
         if (!data) {
             queries.create(req.body).then(data => {
@@ -42,13 +43,13 @@ router.post('/', (req, res, next) => {
     });
 });
 
-router.put('/:organismid', (req, res, next) => {
+router.put('/:organismid', authMiddleware.adminAccess, (req, res, next) => {
     queries.update(req.params.organismid, req.body).then(data => {
         res.json(data[0]);
     })
 });
 
-router.delete('/:organismid', (req, res, next) => {
+router.delete('/:organismid', authMiddleware.adminAccess, (req, res, next) => {
     queries.delete(req.params.organismid).then(() => {
         res.json({
             deleted: true

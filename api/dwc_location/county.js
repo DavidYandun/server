@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const queries = require('../../db/dwc_location/county.queries');
-
+const authMiddleware = require('../../auth/middleware');
 
 router.get('/', (req, res) => {
     queries.getAll().then(data => {
@@ -32,19 +32,19 @@ router.get('/:county', (req, res, next) => {
     })
 });
 
-router.post('/', (req, res, next) => {
+router.post('/',authMiddleware.adminAccess, (req, res, next) => {
     queries.create(req.body).then(data => {
         res.json(data[0]);
     })
 });
 
-router.put('/:county', (req, res, next) => {
+router.put('/:county',authMiddleware.adminAccess, (req, res, next) => {
     queries.update(req.params.county, req.body).then(data => {
         res.json(data[0]);
     })
 });
 
-router.delete('/:county', (req, res, next) => {
+router.delete('/:county',authMiddleware.adminAccess, (req, res, next) => {
     queries.delete(req.params.county).then(() => {
         res.json({
             deleted: true

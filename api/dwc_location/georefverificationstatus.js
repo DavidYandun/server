@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const queries = require('../../db/dwc_location/georefverificationstatus.queries');
-
+const authMiddleware = require('../../auth/middleware');
 
 router.get('/', (req, res) => {
     queries.getAll().then(data => {
@@ -20,19 +20,19 @@ router.get('/:georeferenceverificationstatus', (req, res, next) => {
     })
 });
 
-router.post('/', (req, res, next) => {
+router.post('/',authMiddleware.adminAccess, (req, res, next) => {
     queries.create(req.body).then(data => {
         res.json(data[0]);
     })
 });
 
-router.put('/:georeferenceverificationstatus', (req, res, next) => {
+router.put('/:georeferenceverificationstatus',authMiddleware.adminAccess, (req, res, next) => {
     queries.update(req.params.georeferenceverificationstatus, req.body).then(data => {
         res.json(data[0]);
     })
 });
 
-router.delete('/:georeferenceverificationstatus', (req, res, next) => {
+router.delete('/:georeferenceverificationstatus',authMiddleware.adminAccess, (req, res, next) => {
     queries.delete(req.params.georeferenceverificationstatus).then(() => {
         res.json({
             deleted: true

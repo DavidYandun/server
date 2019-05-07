@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const queries = require('../../db/dwc_location/geodeticdatum.queries');
-
+const authMiddleware = require('../../auth/middleware');
 
 router.get('/', (req, res) => {
     queries.getAll().then(data => {
@@ -20,19 +20,19 @@ router.get('/:geodeticdatum', (req, res, next) => {
     })
 });
 
-router.post('/', (req, res, next) => {
+router.post('/',authMiddleware.adminAccess, (req, res, next) => {
     queries.create(req.body).then(data => {
         res.json(data[0]);
     })
 });
 
-router.put('/:geodeticdatum', (req, res, next) => {
+router.put('/:geodeticdatum',authMiddleware.adminAccess, (req, res, next) => {
     queries.update(req.params.geodeticdatum, req.body).then(data => {
         res.json(data[0]);
     })
 });
 
-router.delete('/:geodeticdatum', (req, res, next) => {
+router.delete('/:geodeticdatum',authMiddleware.adminAccess, (req, res, next) => {
     queries.delete(req.params.geodeticdatum).then(() => {
         res.json({
             deleted: true

@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const queries = require('../../db/dwc_occurrence/organismquantitytype.queries');
-
+const authMiddleware = require('../../auth/middleware');
 
 router.get('/', (req, res) => {
     queries.getAll().then(data => {
@@ -20,19 +20,19 @@ router.get('/:organismquantitytype', (req, res, next) => {
     })
 });
 
-router.post('/', (req, res, next) => {
+router.post('/', authMiddleware.adminAccess, (req, res, next) => {
     queries.create(req.body).then(data => {
         res.json(data[0]);
     })
 });
 
-router.put('/:organismquantitytype', (req, res, next) => {
+router.put('/:organismquantitytype', authMiddleware.adminAccess, (req, res, next) => {
     queries.update(req.params.organismquantitytype, req.body).then(data => {
         res.json(data[0]);
     })
 });
 
-router.delete('/:organismquantitytype', (req, res, next) => {
+router.delete('/:organismquantitytype', authMiddleware.adminAccess, (req, res, next) => {
     queries.delete(req.params.organismquantitytype).then(() => {
         res.json({
             deleted: true

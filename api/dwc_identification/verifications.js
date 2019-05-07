@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const queries = require('../../db/dwc_identification/verification.queries');
+const authMiddleware= require('../../auth/middleware');
 
 
 function validVerification(verification) {
@@ -26,7 +27,7 @@ router.get('/:verificationstatus', (req, res, next) => {
     })
 });
 
-router.post('/', (req, res, next) => {
+router.post('/',authMiddleware.adminAccess, (req, res, next) => {
     if (validVerification(req.body)) {
         //insert into db
         queries.create(req.body).then(data => {
@@ -37,7 +38,7 @@ router.post('/', (req, res, next) => {
     }
 });
 
-router.put('/:verificationstatus', (req, res, next) => {
+router.put('/:verificationstatus',authMiddleware.adminAccess, (req, res, next) => {
     if (validVerification(req.body)) {
         //update sticker
         queries.update(req.params.verificationstatus, req.body).then(data => {
@@ -48,7 +49,7 @@ router.put('/:verificationstatus', (req, res, next) => {
     }
 });
 
-router.delete('/:verificationstatus', (req, res, next) => {
+router.delete('/:verificationstatus',authMiddleware.adminAccess, (req, res, next) => {
     queries.delete(req.params.verificationstatus).then(() => {
         res.json({
             deleted: true

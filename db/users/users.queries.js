@@ -16,6 +16,10 @@ module.exports = {
     getOneByEmail: (email) => {
         return knex('em_tab_usu_users').where('email', email).first();
     },
+    getPerfil: (email) => {
+        return knex('em_tab_usu_users').where('email', email).first()
+        .select('name','lastname','url');
+    },
 
     create: (user) => {
         return knex('em_tab_usu_users').insert(user, 'userid').then(ids => {

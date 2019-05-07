@@ -10,4 +10,6 @@ module.exports = {
     client:'pg',
     connection:'postgres://postgres:12345@localhost:5433/test-emuseoDB'
   }
+
+ 
 };
