@@ -46,11 +46,22 @@ router.get('/', (req, res, next) => {
         res.json(data);
     })
 });
+router.get('/principal/:identificationid', (req, res) => {
+    queries.getOnePrincipal(req.params.identificationid).then(data => {
+        if (data) {
+            res.json(data);
+        } else {
+            res.status(404);
+            next(new Error('Not Found :('));
+        }
+    })
+});
 
 router.get('/img/:img', (req, res) => {
     let ruta = path.join(__dirname, '../../images_collection', req.params.img);
     return res.sendFile(ruta);
-})
+});
+
 
 router.post('/', authMiddleware.adminAccess, (req, res, next) => {
     queries.create(req.body).then(data => {

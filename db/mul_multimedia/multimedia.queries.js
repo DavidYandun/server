@@ -14,6 +14,9 @@ module.exports = {
     getOneId(identificationid) {
         return knex('em_tab_mul_multimedia').where('identificationid', identificationid).first();
     },
+    getOnePrincipal(identificationid) {
+        return knex('em_tab_mul_multimedia').where('identificationid', identificationid).andWhere('principal', true).first();
+    },
     getMax() {
         return knex('em_tab_mul_multimedia').max('multimediaid as multimediaid').first();
     },
