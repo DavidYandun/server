@@ -4,12 +4,7 @@ module.exports = {
 
   development:{
     client:'pg',
-    connection:'postgres://postgres:12345@localhost:5433/sibUTNDB'
+    connection:'postgres://postgres:emUS3OUTN@localhost:5432/sibUTNDB'
   },
-  test:{
-    client:'pg',
-    connection:'postgres://postgres:12345@localhost:5433/test-emuseoDB'
-  }
-
  
 };
