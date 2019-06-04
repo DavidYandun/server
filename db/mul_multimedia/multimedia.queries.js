@@ -8,6 +8,18 @@ module.exports = {
     getAllId(identificationid) {
         return knex('em_tab_mul_multimedia').where('identificationid', identificationid);
     },
+    getAllFotografiaId(identificationid) {
+        return knex('em_tab_mul_multimedia').where('identificationid', identificationid)
+            .andWhere('typemedia','FOTOGRAFIA');
+    },
+    getAllVideoId(identificationid) {
+        return knex('em_tab_mul_multimedia').where('identificationid', identificationid)
+            .andWhere('typemedia','VIDEO');
+    },
+    getAllAudioId(identificationid) {
+        return knex('em_tab_mul_multimedia').where('identificationid', identificationid)
+            .andWhere('typemedia','AUDIO');
+    },
     getOne(multimediaid) {
         return knex('em_tab_mul_multimedia').where('multimediaid', multimediaid).first();
     },

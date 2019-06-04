@@ -4,7 +4,7 @@ module.exports = {
 
   development:{
     client:'pg',
-    connection:'postgres://postgres:emUS3OUTN@localhost:5432/sibUTNDB'
+    connection:'postgres://postgres:12345@localhost:5433/sibUTNDB'
   },
  
 };
