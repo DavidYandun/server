@@ -10,12 +10,22 @@ function validVerification(verification) {
     return hasName && hasDescription;
 }
 
-router.get('/', (req, res) => {
+router.get('/',authMiddleware.taxonomoAccess, (req, res) => {
     queries.getAll().then(data => {
         res.json(data);
     })
 });
 
+router.get('/curador',authMiddleware.curadorAccess, (req, res) => {
+    queries.getAllCurador().then(data => {
+        res.json(data);
+    })
+});
+router.get('/digitador',authMiddleware.usuarioAccess, (req, res) => {
+    queries.getAllDigitador().then(data => {
+        res.json(data);
+    })
+});
 router.get('/:verificationstatus', (req, res, next) => {
     queries.getOne(req.params.verificationstatus).then(data => {
         if (data) {
@@ -26,6 +36,7 @@ router.get('/:verificationstatus', (req, res, next) => {
         }
     })
 });
+
 
 router.post('/',authMiddleware.adminAccess, (req, res, next) => {
     if (validVerification(req.body)) {

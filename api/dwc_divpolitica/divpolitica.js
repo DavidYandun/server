@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const queries = require('../../db/dwc_divpolitica/divpolitica.queries');
-
+const authMiddleware=require('../../auth/middleware');
 
 router.get('/', (req, res) => {
     queries.getAll().then(data => {
@@ -20,19 +20,19 @@ router.get('/:divpoliticaid', (req, res, next) => {
     })
 });
 
-router.post('/', (req, res, next) => {
+router.post('/',authMiddleware.usuarioAccess, (req, res, next) => {
     queries.create(req.body).then(data => {
         res.json(data[0]);
     })
 });
 
-router.put('/:divpoliticaid', (req, res, next) => {
+router.put('/:divpoliticaid',authMiddleware.usuarioAccess, (req, res, next) => {
     queries.update(req.params.divpoliticaid, req.body).then(data => {
         res.json(data[0]);
     })
 });
 
-router.delete('/:divpoliticaid', (req, res, next) => {
+router.delete('/:divpoliticaid',authMiddleware.adminAccess, (req, res, next) => {
     queries.delete(req.params.divpoliticaid).then(() => {
         res.json({
             deleted: true

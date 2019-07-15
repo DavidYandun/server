@@ -9,6 +9,17 @@ router.get('/', (req, res) => {
     })
 });
 
+router.get('/taxonomo',authMiddleware.taxonomoAccess, (req, res) => {
+    queries.getAllTaxonomo().then(data => {
+        res.json(data);
+    })
+});
+router.get('/usuario',authMiddleware.usuarioAccess, (req, res) => {
+    queries.getAllUsuario().then(data => {
+        res.json(data);
+    })
+});
+
 router.get('/:taxonomicstatus', (req, res, next) => {
     queries.getOne(req.params.taxonomicstatus).then(data => {
         if (data) {
@@ -20,13 +31,13 @@ router.get('/:taxonomicstatus', (req, res, next) => {
     })
 });
 
-router.post('/',authMiddleware.adminAccess, (req, res, next) => {
+router.post('/',authMiddleware.usuarioAccess, (req, res, next) => {
     queries.create(req.body).then(data => {
         res.json(data[0]);
     })
 });
 
-router.put('/:taxonomicstatus',authMiddleware.adminAccess, (req, res, next) => {
+router.put('/:taxonomicstatus',authMiddleware.usuarioAccess, (req, res, next) => {
     queries.update(req.params.taxonomicstatus, req.body).then(data => {
         res.json(data[0]);
     })

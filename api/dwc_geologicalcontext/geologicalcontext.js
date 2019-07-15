@@ -30,7 +30,7 @@ router.get('/id/:identificationid', (req, res, next) => {
     })
 });
 
-router.post('/',authMiddleware.adminAccess, (req, res, next) => {
+router.post('/',authMiddleware.usuarioAccess, (req, res, next) => {
     queries.getOneId(req.body.identificationid).then(data => {
         if (!data) {
             queries.create(req.body).then(data => {
@@ -42,7 +42,7 @@ router.post('/',authMiddleware.adminAccess, (req, res, next) => {
     });
 });
 
-router.put('/:geologicalcontextid',authMiddleware.adminAccess, (req, res, next) => {
+router.put('/:geologicalcontextid',authMiddleware.usuarioAccess, (req, res, next) => {
     queries.update(req.params.geologicalcontextid, req.body).then(data => {
         res.json(data[0]);
     })

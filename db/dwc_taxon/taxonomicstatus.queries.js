@@ -5,6 +5,14 @@ module.exports = {
         const knexQuery = knex('em_tab_dwc_taxonomicstatus');
         return knexQuery;
     },
+    getAllTaxonomo() {
+        const knexQuery = knex('em_tab_dwc_taxonomicstatus');
+        return knexQuery;
+    },
+    getAllUsuario() {
+        const knexQuery = knex('em_tab_dwc_taxonomicstatus').andWhereNot('taxonomicstatus','ACEPTADO');
+        return knexQuery;
+    },
     getOne(taxonomicstatus) {
         return knex('em_tab_dwc_taxonomicstatus').where('taxonomicstatus', taxonomicstatus).first();
     },

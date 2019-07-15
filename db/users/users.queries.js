@@ -18,7 +18,7 @@ module.exports = {
     },
     getPerfil: (email) => {
         return knex('em_tab_usu_users').where('email', email).first()
-        .select('name','lastname','url');
+        .select('name','lastname','url','rolid');
     },
 
     create: (user) => {

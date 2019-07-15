@@ -5,6 +5,7 @@ const bcrypt = require('bcryptjs');
 const path = require('path');
 const authMiddleware=require('../../auth/middleware');
 
+
 function isValidId(req, res, next) {
     if (!isNaN(req.params.userid)) return next();
     next(new Error('ID invalida...'));
@@ -20,7 +21,7 @@ function validateUser(user) {
     return validEmail && validPassword;
 }
 
-router.get('/rol', (req, res) => {
+router.get('/rol',authMiddleware.adminAccess, (req, res) => {
     const {
         email
     } = req.query;
@@ -32,13 +33,13 @@ router.get('/rol', (req, res) => {
     })
 });
 
-router.get('/perfil/:email',(req,res)=>{
+router.get('/perfil/:email',authMiddleware.usuarioAccess,(req,res)=>{
     queries.getPerfil(req.params.email).then(data=>{
         res.json(data);
     })
 })
 
-router.get('/',authMiddleware.adminAccess, (req, res) => {
+router.get('/',authMiddleware.adminAccess, (req, res,next) => {
     const {
         email
     } = req.query;
@@ -73,7 +74,7 @@ router.get('/:userid', isValidId, (req, res, next) => {
 });*/
 
 
-router.post('/', (req, res, next) => {
+router.post('/', authMiddleware.adminAccess,(req, res, next) => {
     if (validateUser(req.body)) {
         //verificar si el userid ya está registrado
         queries.getOne(req.body.userid).then(data => {
@@ -139,12 +140,12 @@ router.delete('/:userid', isValidId, (req, res, next) => {
     })
 });
 
-router.get('/img/:img', (req, res) => {
+router.get('/img/:img',authMiddleware.adminAccess, (req, res) => {
     let ruta = path.join(__dirname, '../../images_perfil', req.params.img);
     return res.sendFile(ruta);
 })
 
-router.post('/upload', function (req, res) {
+router.post('/upload',authMiddleware.adminAccess, function (req, res) {
 
     if (Object.keys(req.files).length == 0) {
         return res.status(400).send('No hay archivos subidos.');

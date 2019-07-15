@@ -76,7 +76,7 @@ router.get('/', (req, res, next) => {
         res.json(data);
     })
 });
-router.get('/principal/:identificationid', (req, res) => {
+router.get('/principal/:identificationid', (req, res,next) => {
     queries.getOnePrincipal(req.params.identificationid).then(data => {
         if (data) {
             res.json(data);

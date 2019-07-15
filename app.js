@@ -45,7 +45,7 @@ const municipality = require('./api/dwc_location/municipality');
 
 
 //taxon
-const linneo = require('./api/dwc_taxon/linneo');
+//const linneo = require('./api/dwc_taxon/linneo');
 const taxonrank = require('./api/dwc_taxon/taxonrank');
 const taxonomicstatus = require('./api/dwc_taxon/taxonomicstatus');
 const taxon = require('./api/dwc_taxon/taxon');
@@ -112,12 +112,12 @@ app.use(cors({
   credentials:true
 }));
 //temporales
-app.use('/api/stickers', stickers);
-app.use('/api/persons', persons);
+//app.use('/api/stickers', stickers);
+//app.use('/api/persons', persons);
 
 //users
 app.use('/api/rols', rols);
-app.use('/api/users',authMiddleware.adminAccess, users);
+app.use('/api/users', users);
 app.use('/auth', auth);
 
 //identification
@@ -137,7 +137,6 @@ app.use('/api/county', county);
 app.use('/api/municipality', municipality);
 
 //taxon
-app.use('/api/linneo', linneo);
 app.use('/api/taxonrank', taxonrank);
 app.use('/api/taxonomicstatus', taxonomicstatus);
 app.use('/api/taxon', taxon);

@@ -4,7 +4,7 @@ const queries = require('../../db/dwc_identification/identification.queries');
 const authMiddleware = require('../../auth/middleware');
 
 
-router.get('/collection',authMiddleware.adminAccess, (req, res, next) => {
+router.get('/collection',authMiddleware.usuarioAccess, (req, res, next) => {
     queries.getCollection().then(data => {
 
         if (data) {
@@ -17,7 +17,6 @@ router.get('/collection',authMiddleware.adminAccess, (req, res, next) => {
 });
 router.get('/collectionaprobados', (req, res, next) => {
     queries.getCollectionAprobados().then(data => {
-
         if (data) {
             res.json(data);
         } else {
@@ -26,7 +25,7 @@ router.get('/collectionaprobados', (req, res, next) => {
         }
     })
 });
-router.get('/collectionpdf', (req, res, next) => {
+router.get('/collectionpdf',authMiddleware.usuarioAccess, (req, res, next) => {
     queries.getCollectionPDF().then(data => {
 
         if (data) {
@@ -86,13 +85,13 @@ router.get('/:identificationid', (req, res, next) => {
 });
 
 
-router.post('/', authMiddleware.adminAccess, (req, res, next) => {
+router.post('/', authMiddleware.usuarioAccess, (req, res, next) => {
     queries.create(req.body).then(data => {
         res.json(data[0]);
     })
 });
 
-router.put('/:identificationid', authMiddleware.adminAccess, (req, res, next) => {
+router.put('/:identificationid', authMiddleware.usuarioAccess, (req, res, next) => {
     queries.update(req.params.identificationid, req.body).then(data => {
         res.json(data[0]);
     })

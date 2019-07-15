@@ -30,13 +30,13 @@ router.get('/id/:identificationid', (req, res, next) => {
     })
 });
 
-router.post('/', authMiddleware.adminAccess, (req, res, next) => {
+router.post('/', authMiddleware.usuarioAccess, (req, res, next) => {
     queries.create(req.body).then(data => {
         res.json(data[0]);
     })
 });
 
-router.put('/:eventid', authMiddleware.adminAccess, (req, res, next) => {
+router.put('/:eventid', authMiddleware.usuarioAccess, (req, res, next) => {
     queries.update(req.params.eventid, req.body).then(data => {
         res.json(data[0]);
     })

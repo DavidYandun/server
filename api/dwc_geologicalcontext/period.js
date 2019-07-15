@@ -20,13 +20,13 @@ router.get('/:name', (req, res, next) => {
     })
 });
 
-router.post('/',authMiddleware.adminAccess, (req, res, next) => {
+router.post('/',authMiddleware.usuarioAccess, (req, res, next) => {
     queries.create(req.body).then(data => {
         res.json(data[0]);
     })
 });
 
-router.put('/:name',authMiddleware.adminAccess, (req, res, next) => {
+router.put('/:name',authMiddleware.usuarioAccess, (req, res, next) => {
     queries.update(req.params.name, req.body).then(data => {
         res.json(data[0]);
     })

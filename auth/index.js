@@ -41,12 +41,14 @@ router.post('/login', (req, res, next) => {
                             httpOnly: true,
                             secure: isSecure,
                             //secure:true,
+                            //expires: new Date(Date.now() + 180000),
                             signed: true
                         });
                         res.cookie('rolid', data.rolid, {
                             httpOnly: true,
                             secure: isSecure,
                             //secure:true,
+                            //expires: new Date(Date.now() + 180000),
                             signed: true
 
                         });

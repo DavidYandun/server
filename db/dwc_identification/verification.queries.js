@@ -5,6 +5,14 @@ module.exports = {
         const knexQuery = knex('em_tab_dwc_verification');
         return knexQuery;
     },
+    getAllCurador() {
+        const knexQuery = knex('em_tab_dwc_verification').andWhereNot('em_tab_dwc_verification.verificationstatus','APROBADO PARA PUBLICAR');
+        return knexQuery;
+    },
+    getAllDigitador() {
+        const knexQuery = knex('em_tab_dwc_verification').andWhere('em_tab_dwc_verification.verificationstatus','NUEVO REGISTRO');
+        return knexQuery;
+    },
     getOne(verificationstatus) {
         return knex('em_tab_dwc_verification').where('verificationstatus', verificationstatus).first();
     },
