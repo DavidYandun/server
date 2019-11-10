@@ -195,7 +195,7 @@ app.use(session({
 
 app.get('/', (req, res) => {
   req.session.cuenta = req.session.cuenta ? req.session.cuenta + 1 : 1;
-  res.send('pagina vista' + req.session.cuenta);
+  res.send('Acceso Denegado');
 });
 
 //app.use(express.static(path.join(__dirname, 'public')));
